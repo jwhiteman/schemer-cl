@@ -1,0 +1,75 @@
+using letrec:
+  fold
+  map
+  filter
+
+  then mapcat (should implement concat)
+  (mapcat add1 '((1 2 3) (4 5 6)))
+
+
+concat with cps
+  identity
+  concat
+  concat-helper
+
+cps-vs-select-vs-native-vs-iterative (ruby)
+
+writer filter 3 different ways:
+  greater-than-two
+  fold (normal)
+  identity
+  
+  v1. consing onto the recursion (filter)
+  v2. acc w/ reverse             (acc-filter)
+  v3. filter w/ fold             (fold-filter)
+  v4. cps-filter
+
+write fold 3 different ways: (summing integers)
+  identity
+  cons-em!
+  
+  v1. standard
+  v2. summing with apply=onto-recursion (not really)
+  v3. cps-fold
+
+write map 3 different ways:
+  add-one
+  identity
+
+  v1. map (consing)
+  v2. map w/ acc & reverse
+  v3. map w/ cps
+
+mapcat-normal
+  identity
+  concat
+  concat-helper
+  
+  map
+  fold
+  mapcat (using fold)
+  
+mapcat in elixir, using both cps and List.foldl
+
+mapcat w/ cps
+  identity
+  fold
+  -map-with-cps
+  mapcat
+  
+  (mapcat add1 '((1 2 3) (4 5 6) (7 8 9)))
+  
+
+mapfold
+  mapfold
+  sum-of-prefixes: (sum-of-prefixes '(1 1 1 1 1))
+  
+  then rewrite sum-of-prefixes using just reverse & fold
+
+
+multirember-with-filter
+  filter w/ letrec
+
+right-fold (hint: use cps)
+
+write map & filter using fild

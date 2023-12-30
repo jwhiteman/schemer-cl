@@ -1,0 +1,22 @@
+# napkin evaluator
+
+- a table is an array of hashes
+- given a key and the table, need to return a value
+
+
+eval(e)           -> (meaning e '())
+meaning(e, table) -> ((expression-to-action e) e table)
+exp-to-action  : atom-to-action
+               | list-to-action
+
+atom-to-action : *const
+               | *identifier -> (lookup in table)
+
+list-to-action : *quote
+               | *lambda
+               | *cond            -> evcon & cond-lines-of
+               | *application     -> apply(meaning..., evlis...)
+                                     note: evlis looks a lot like *application. why?
+
+apply : apply-primitive
+      | apply-closure     -> meaning(body-of-closure, table-with-closure-data)
