@@ -1,4 +1,4 @@
-# 10
+# approx 300 lines for a low-budget "scheme" parser & interpreter:
 require "strscan"
 require "pry"
 
@@ -130,22 +130,29 @@ class Parser
 end
 
 module Interpreter
+  # an array of hashes; iterate through and find the one that has :key
+  # ...and return the value
   def lookup_in_table(key, table)
     table.detect { |entry| entry[key] }.fetch(key)
   end
 
+  # convenience for meaning. parses first. empty table for now
   def value(exp_str)
     exp = Parser.parse(exp_str)
 
     meaning(exp, [])
   end
 
+  # lookup the action, call it w/ the exp & table
   def meaning(exp, table)
     action = exp_to_action(exp) # note: action is a method converted into a proc
 
     action[exp, table]
   end
 
+  # dispatch:
+  # expression as an atom (e.g 1, 'b, #'+)
+  # expression as a list (e.g (car (quote a b)))
   def exp_to_action(exp)
     if atom?(exp)
       atom_to_action(exp)
@@ -204,12 +211,14 @@ module Interpreter
 
   def apply_closure(fun, args)
     env, params, body = fun
-    entry             = Hash[params.zip(args)]
-    table             = env.dup.unshift(entry)
+    entry             = Hash[params.zip(args)] # e.g turn formal params e.g (x y) and args e.g [1, 2] into {x: 1, y: 2}
+    table             = env.dup.unshift(entry) # ...and then set it at the top of the "table"
 
     meaning(body, table)
   end
 
+  # iterate through the question/answer pairs
+  # if meaning(question) is true, return meaning(answer)
   def do_cond(exp, table)
     _, *pairs = exp
 
