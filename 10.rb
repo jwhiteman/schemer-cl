@@ -217,6 +217,12 @@ module Interpreter
     meaning(body, table)
   end
 
+  UNSPECIFIED = Class.new do
+    def inspect
+      "#<unspecified>"
+    end
+  end.new
+
   # iterate through the question/answer pairs
   # if meaning(question) is true, return meaning(answer)
   def do_cond(exp, table)
@@ -227,8 +233,8 @@ module Interpreter
         if meaning(question, table)
           throw :result!, meaning(answer, table)
         end
-      end
-    end
+      end;nil
+    end || UNSPECIFIED
   end
 
   # TODO: gong illegal quotes - e.g (quote a b) instead of (quote (a b))
@@ -386,5 +392,9 @@ Class.new(Minitest::Test) do
     value = lookup_in_table(:entree, table)
 
     assert_equal "spaghetti", value
+  end
+
+  def test_unspecified
+    assert_equal UNSPECIFIED, value("(cond ((eq? 1 2) 42))")
   end
 end
