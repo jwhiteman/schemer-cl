@@ -228,13 +228,13 @@ module Interpreter
   def do_cond(exp, table)
     _, *pairs = exp
 
-    catch(:result!) do
-      pairs.each do |question, answer|
-        if meaning(question, table)
-          throw :result!, meaning(answer, table)
-        end
-      end;nil
-    end || UNSPECIFIED
+    pairs.each do |question, answer|
+      if meaning(question, table)
+        return meaning(answer, table) # note: this returns do_cond
+      end
+    end
+
+    UNSPECIFIED
   end
 
   # TODO: gong illegal quotes - e.g (quote a b) instead of (quote (a b))
